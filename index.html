@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SigaCBIT - Sistema de Gestión</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos para logos basados en imagen real */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .logo-image {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .logo-title {
+            color: var(--cbit-red);
+            margin: 10px 0 5px 0;
+            font-size: 1.8rem;
+        }
+        
+        .logo-title span {
+            color: var(--cbit-blue);
+        }
+        
+        .logo-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .logo-motto {
+            color: var(--cbit-blue);
+            font-style: italic;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eaeaea;
+        }
+        
+        /* Logo del sidebar */
+        .sidebar-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-logo-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: rgba(255,255,255,0.1);
+            padding: 5px;
+        }
+        
+        .sidebar-logo-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .sidebar-logo-title {
+            color: white;
+            margin: 0;
+            font-size: 1.1rem;
+            line-height: 1.2;
+        }
+        
+        .sidebar-logo-title span {
+            color: var(--cbit-red);
+        }
+        
+        .sidebar-logo-subtitle {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            margin-top: 2px;
+        }
+        
+        /* Estilos para esconder las secciones */
+        .section-content {
+            display: none;
+        }
+        
+        .section-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen (Visible inicialmente) -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <!-- Logo con imagen real -->
+                <div class="logo-container">
+                    <!-- Imagen real del logo CBIT -->
+                    <img src="logo cbit 300dpi.png" alt="CBIT Logo" class="logo-image">
+                    
+                    <h2 class="logo-title">SIGA<span>CBIT</span></h2>
+                    <p class="logo-subtitle">Sistema de Gestión de Espacios Tecnológicos</p>
+                    <p class="logo-motto">Centros Bolivarianos de Informática y Telemática</p>
+                </div>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="username" placeholder="Ingrese su usuario" required>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" id="password" placeholder="Ingrese su contraseña" required>
+                </div>
+                
+                <button type="submit" class="btn-submit" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
+            
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App (Oculto inicialmente) -->
+    <div id="app-container" style="display: none;">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <!-- Logo del sidebar con imagen -->
+                <div class="sidebar-logo-container">
+                    <!-- Imagen real del logo CBIT (versión pequeña) -->
+                    <img src="logo cbit 300dpi.png" alt="CBIT Logo" class="sidebar-logo-image">
+                    
+                    <div class="sidebar-logo-text">
+                        <h3 class="sidebar-logo-title">SIGA<span>CBIT</span></h3>
+                        <small class="sidebar-logo-subtitle" id="user-role-display"></small>
+                    </div>
+                </div>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <!-- El menú se cargará dinámicamente según el rol -->
+            </ul>
+
+            <div style="padding: 20px; font-size: 0.8rem; border-top: 1px solid #334155;">
+                <p><i class="fas fa-user-circle"></i> <span id="current-user"></span></p>
+                <button id="logout-btn" style="background:none; border: 1px solid #444; color: #ccc; cursor:pointer; width:100%; padding:5px; border-radius:5px;">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+
+        <main class="content" id="content-area">
+            <!-- TODAS las secciones van aquí, ocultas inicialmente -->
+            
+            <!-- Sección INICIO -->
+            <div id="section-inicio" class="section-content"></div>
+            
+            <!-- Sección INVENTARIO -->
+            <div id="section-inventario" class="section-content"></div>
+            
+            <!-- Sección MANTENIMIENTO -->
+            <div id="section-mantenimiento" class="section-content"></div>
+            
+            <!-- Sección HORARIOS -->
+            <div id="section-horarios" class="section-content"></div>
+            
+            <!-- Sección SOLICITUDES -->
+            <div id="section-solicitudes" class="section-content"></div>
+            
+            <!-- Sección ACTIVIDADES -->
+            <div id="section-actividades" class="section-content"></div>
+            
+            <!-- Sección USUARIOS -->
+            <div id="section-usuarios" class="section-content"></div>
+            
+            <!-- Sección REPORTES -->
+            <div id="section-reportes" class="section-content"></div>
+        </main>
+    </div>
+
+    <!-- Templates de las secciones (ocultos) -->
+    <div id="templates" style="display: none;">
+        
+        <!-- Template: INICIO -->
+        <template id="template-inicio">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Bienvenido al Sistema CBIT</h3>
+                    <div class="user-info">
+                        <small style="color: var(--accent);">Tipo de usuario: </small>
+                        <span class="user-badge" id="role-badge"></span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">3</span>
+                        <div class="notif-panel">
+                            <div class="notif-header">Notificaciones</div>
+                            <div class="notif-item">
+                                <strong>Solicitud Aprobada:</strong> Tu horario para el miércoles ha sido confirmado.
+                            </div>
+                            <div class="notif-item">
+                                <strong>Mantenimiento:</strong> El CBIT estará cerrado este viernes por actualización de Canaima.
+                            </div>
+                            <div class="notif-item" style="color: var(--cbit-blue); text-align: center; cursor: pointer;">
+                                Ver todas las alertas
+                            </div>
+                        </div>
+                    </div>
+                    <img id="user-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="grid-2cols">
+                <div id="inicio-left-column">
+                    <!-- Se llenará dinámicamente según el tipo de usuario -->
+                </div>
+
+                <section>
+                    <div class="card">
+                        <h3 style="margin-top:0;"><i class="fas fa-clock"></i> Horarios de la Semana</h3>
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee;">
+                                <span>Lunes</span>
+                                <span class="estado-inoperativo">Ocupado (Taller)</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee;">
+                                <span>Martes</span>
+                                <span class="estado-operativo">Disponible</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee;">
+                                <span>Miércoles</span>
+                                <span style="color: var(--cbit-blue); font-weight: bold;">Tu Reserva</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="background: #e3f2fd; border: 1px solid #bbdefb;">
+                        <h4 style="margin: 0; color: #0d47a1;"><i class="fas fa-info-circle"></i> Recordatorio Educativo</h4>
+                        <p style="font-size: 0.85rem; line-height: 1.6;">Recuerda que el CBIT es un espacio para la soberanía tecnológica. Fomenta el uso de software libre y cuida el hardware de nuestras estaciones.</p>
+                    </div>
+                </section>
+            </div>
+        </template>
+
+        <!-- Template: Panel Admin (para inicio) -->
+        <template id="template-inicio-admin">
+            <section class="card admin-only">
+                <h3 style="margin-top:0; color: var(--cbit-red);"><i class="fas fa-cog"></i> Panel de Administración</h3>
+                <p style="font-size: 0.9rem; color: #666;">Bienvenido al panel de administración del sistema CBIT.</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="stat-card">
+                        <div class="stat-number">24</div>
+                        <div>Equipos Registrados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">18</div>
+                        <div>Solicitudes Pendientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8</div>
+                        <div>Reportes Activos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">42</div>
+                        <div>Usuarios Registrados</div>
+                    </div>
+                </div>
+            </section>
+        </template>
+
+        <!-- Template: Panel Docente (para inicio) -->
+        <template id="template-inicio-docente">
+            <section class="card">
+                <h3 style="margin-top:0; color: var(--cbit-blue);"><i class="fas fa-calendar-plus"></i> Solicitar Apartado de Espacio</h3>
+                <p style="font-size: 0.9rem; color: #666;">Completa los datos para solicitar el uso del aula tecnológica para tus actividades.</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                
+                <form>
+                    <div class="form-group">
+                        <label>Motivo de la Actividad</label>
+                        <input type="text" placeholder="Ej: Clase de Informática, Taller de Robótica...">
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Fecha Sugerida</label>
+                            <input type="date">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Bloque de Horario</label>
+                            <select>
+                                <option>08:00 AM - 10:00 AM</option>
+                                <option>10:00 AM - 12:00 PM</option>
+                                <option>01:00 PM - 03:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantidad de Estudiantes (Aprox.)</label>
+                        <input type="number" min="1" max="30">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Requerimientos Especiales</label>
+                        <textarea rows="3" placeholder="Ej: Uso de proyector, acceso a internet..."></textarea>
+                    </div>
+
+                    <button type="button" class="btn-submit">Enviar Solicitud</button>
+                </form>
+            </section>
+        </template>
+
+        <!-- Template: INVENTARIO -->
+        <template id="template-inventario">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Inventario de Equipos CBIT</h3>
+                    <small style="color: var(--accent);">Gestión de equipos tecnológicos (RF-05 a RF-09)</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">2</span>
+                    </div>
+                    <img id="inventario-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card admin-only">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin:0; color: var(--cbit-red);"><i class="fas fa-desktop"></i> Registro de Equipos Tecnológicos</h3>
+                    <button class="btn-submit" id="btnNuevoEquipo"><i class="fas fa-plus"></i> Nuevo Equipo</button>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <input type="text" placeholder="Buscar por número de serie, tipo o marca..." style="flex: 1;">
+                    <select style="width: 200px;">
+                        <option>Todos los tipos</option>
+                        <option>Computadora</option>
+                        <option>Impresora</option>
+                        <option>Proyector</option>
+                        <option>Router/Red</option>
+                    </select>
+                    <button class="btn-submit">Buscar</button>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo</th>
+                                <th>Marca/Modelo</th>
+                                <th>N° Serie</th>
+                                <th>Estado</th>
+                                <th>Ubicación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CBIT-001</td>
+                                <td><span class="role-indicator">Computadora</span></td>
+                                <td>HP ProDesk 400</td>
+                                <td>SN-HP789123</td>
+                                <td class="estado-operativo">Operativo</td>
+                                <td>Aula Principal</td>
+                                <td>
+                                    <button class="btn-edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CBIT-002</td>
+                                <td><span class="role-indicator">Proyector</span></td>
+                                <td>Epson EB-X41</td>
+                                <td>SN-EP456789</td>
+                                <td class="estado-mantenimiento">En Mantenimiento</td>
+                                <td>Sala de Proyección</td>
+                                <td>
+                                    <button class="btn-edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <!-- Template: MANTENIMIENTO -->
+        <template id="template-mantenimiento">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Gestión de Mantenimiento CBIT</h3>
+                    <small style="color: var(--accent);">Reporte y seguimiento de fallas técnicas (RF-16, RF-18)</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">5</span>
+                    </div>
+                    <img id="mantenimiento-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card admin-only">
+                <h3 style="margin-top:0; color: var(--cbit-red);"><i class="fas fa-tools"></i> Panel de Mantenimiento</h3>
+                <p style="font-size: 0.9rem; color: #666;">Solo visible para administradores.</p>
+            </div>
+        </template>
+
+        <!-- Template: HORARIOS -->
+        <template id="template-horarios">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Calendario de Disponibilidad</h3>
+                    <small style="color: var(--accent);">Visualización de horarios de espacios y equipos</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">1</span>
+                    </div>
+                    <img id="horarios-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card">
+                <h3 style="margin-top:0; color: var(--cbit-blue);"><i class="fas fa-calendar-alt"></i> Horarios Disponibles</h3>
+                <p style="font-size: 0.9rem; color: #666;">Consulta los horarios disponibles para el uso de espacios CBIT.</p>
+                
+                <div style="margin-top: 20px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Espacio</th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miércoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Aula Principal</strong></td>
+                                <td class="estado-inoperativo">Ocupado</td>
+                                <td class="estado-operativo">Disponible</td>
+                                <td class="estado-revision">Reservado</td>
+                                <td class="estado-operativo">Disponible</td>
+                                <td class="estado-mantenimiento">Mantenimiento</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sala de Proyección</strong></td>
+                                <td class="estado-operativo">Disponible</td>
+                                <td class="estado-operativo">Disponible</td>
+                                <td class="estado-inoperativo">Ocupado</td>
+                                <td class="estado-operativo">Disponible</td>
+                                <td class="estado-operativo">Disponible</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <!-- Template: SOLICITUDES (Admin) -->
+        <template id="template-solicitudes-admin">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Gestión de Solicitudes</h3>
+                    <small style="color: var(--accent);">Aprobación y seguimiento de solicitudes</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">3</span>
+                    </div>
+                    <img id="solicitudes-admin-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card admin-only">
+                <h3 style="margin-top:0; color: var(--cbit-red);"><i class="fas fa-file-signature"></i> Panel de Aprobación de Solicitudes</h3>
+                <p style="font-size: 0.9rem; color: #666;">Solo visible para administradores.</p>
+            </div>
+        </template>
+
+        <!-- Template: SOLICITUDES (Docente) -->
+        <template id="template-solicitudes-docente">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Solicitar Uso de Espacio</h3>
+                    <small style="color: var(--accent);">Solicita el uso de espacios o equipos CBIT</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">3</span>
+                    </div>
+                    <img id="solicitudes-docente-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card">
+                <h3 style="margin-top:0; color: var(--cbit-blue);"><i class="fas fa-calendar-plus"></i> Nueva Solicitud</h3>
+                <p style="font-size: 0.9rem; color: #666;">Completa el formulario para solicitar el uso de espacios o equipos del CBIT.</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                
+                <form>
+                    <div class="form-group">
+                        <label>Tipo de Solicitud</label>
+                        <select>
+                            <option>Uso de Aula Principal</option>
+                            <option>Uso de Sala de Proyección</option>
+                            <option>Préstamo de Equipo</option>
+                            <option>Uso de Laboratorio</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Motivo</label>
+                        <input type="text" placeholder="Describa el motivo de la solicitud...">
+                    </div>
+
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Fecha de Uso</label>
+                            <input type="date">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Hora</label>
+                            <select>
+                                <option>08:00 - 10:00</option>
+                                <option>10:00 - 12:00</option>
+                                <option>14:00 - 16:00</option>
+                                <option>16:00 - 18:00</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción Detallada</label>
+                        <textarea rows="4" placeholder="Describa con detalle lo que necesita..."></textarea>
+                    </div>
+
+                    <button type="button" class="btn-submit"><i class="fas fa-paper-plane"></i> Enviar Solicitud</button>
+                </form>
+            </div>
+        </template>
+
+        <!-- Template: ACTIVIDADES -->
+        <template id="template-actividades">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Registro de Actividades</h3>
+                    <small style="color: var(--accent);">Registra las actividades realizadas en el CBIT</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">2</span>
+                    </div>
+                    <img id="actividades-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card">
+                <h3 style="margin-top:0; color: var(--cbit-blue);"><i class="fas fa-chalkboard-teacher"></i> Registrar Nueva Actividad</h3>
+                <p style="font-size: 0.9rem; color: #666;">Registra las actividades educativas realizadas en el CBIT.</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                
+                <form>
+                    <div class="form-group">
+                        <label>Tipo de Actividad</label>
+                        <select>
+                            <option>Clase Regular</option>
+                            <option>Taller</option>
+                            <option>Capacitación</option>
+                            <option>Evento Especial</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nombre de la Actividad</label>
+                        <input type="text" placeholder="Ej: Taller de Programación en Python...">
+                    </div>
+
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Fecha</label>
+                            <input type="date">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Duración (horas)</label>
+                            <input type="number" min="1" max="8" value="2">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Participantes</label>
+                        <input type="number" min="1" max="40" placeholder="Número de participantes">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripción de la Actividad</label>
+                        <textarea rows="4" placeholder="Describa lo realizado en la actividad..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Recursos Utilizados</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;">
+                            <label style="display: flex; align-items: center;">
+                                <input type="checkbox" style="width: auto; margin-right: 5px;"> Computadoras
+                            </label>
+                            <label style="display: flex; align-items: center;">
+                                <input type="checkbox" style="width: auto; margin-right: 5px;"> Proyector
+                            </label>
+                            <label style="display: flex; align-items: center;">
+                                <input type="checkbox" style="width: auto; margin-right: 5px;"> Internet
+                            </label>
+                            <label style="display: flex; align-items: center;">
+                                <input type="checkbox" style="width: auto; margin-right: 5px;"> Software Especializado
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-submit"><i class="fas fa-save"></i> Guardar Actividad</button>
+                </form>
+            </div>
+        </template>
+
+        <!-- Template: USUARIOS -->
+        <template id="template-usuarios">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Gestión de Usuarios</h3>
+                    <small style="color: var(--accent);">Administración de usuarios del sistema (RF-01 a RF-04)</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">1</span>
+                    </div>
+                    <img id="usuarios-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card admin-only">
+                <h3 style="margin-top:0; color: var(--cbit-red);"><i class="fas fa-users-cog"></i> Panel de Administración de Usuarios</h3>
+                <p style="font-size: 0.9rem; color: #666;">Solo visible para administradores.</p>
+            </div>
+        </template>
+
+        <!-- Template: REPORTES -->
+        <template id="template-reportes">
+            <header class="top-bar">
+                <div>
+                    <h3 style="margin:0;">Reportes del Sistema</h3>
+                    <small style="color: var(--accent);">Generación de reportes estadísticos</small>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="notif-wrapper">
+                        <i class="fas fa-bell" style="font-size: 1.4rem; color: var(--sidebar-dark);"></i>
+                        <span class="notif-badge">0</span>
+                    </div>
+                    <img id="reportes-avatar" src="" style="width: 40px; border-radius: 50%;">
+                </div>
+            </header>
+
+            <div class="card admin-only">
+                <h3 style="margin-top:0; color: var(--cbit-red);"><i class="fas fa-chart-bar"></i> Panel de Reportes</h3>
+                <p style="font-size: 0.9rem; color: #666;">Solo visible para administradores.</p>
+            </div>
+        </template>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
