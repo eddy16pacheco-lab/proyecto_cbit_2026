@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBIT Manager Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <img src="img/logo cbit 300dpi.png" alt="CBIT Logo" onerror="this.style.display='none'">
+                <div class="logo-text">
+                    <h2>CBIT<span>Manager</span></h2>
+                    <p class="subtitle">Sistema de Gestión</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-label">Inicio</div>
+                <a href="#" class="nav-item active" data-target="dashboard"><i class="fas fa-home"></i>
+                    <span>Panel Principal</span></a>
+
+                <div class="nav-label">Operaciones</div>
+                <a href="#" class="nav-item" data-target="calendario-reservas"><i class="fas fa-calendar-alt"></i>
+                    <span>Calendario</span></a>
+                <a href="#" class="nav-item" data-target="reserva-equipos"><i class="fas fa-calendar-check"></i>
+                    <span>Reservaciones</span></a>
+                <a href="#" class="nav-item" data-target="registro-docentes"><i class="fas fa-chalkboard-teacher"></i>
+                    <span>Registro de Docentes</span></a>
+                <a href="#" class="nav-item" data-target="registro-ingreso"><i class="fas fa-id-card"></i>
+                    <span>Registro de Ingreso</span></a>
+                <div class="nav-group">
+                    <a href="#" class="nav-item has-submenu" id="menu-equipos">
+                        <i class="fas fa-laptop-medical"></i> <span style="flex:1">Gestión de Equipos</span>
+                        <i class="fas fa-chevron-down submenu-toggle"></i>
+                    </a>
+                    <div class="nav-submenu" id="submenu-equipos">
+                        <a href="#" class="nav-subitem" data-target="estado-equipos"><i class="fas fa-list-ul"></i>
+                            <span>Estado e Historial</span></a>
+                        <a href="#" class="nav-subitem" data-target="soporte-tecnico"><i class="fas fa-tools"></i>
+                            <span>Soporte Técnico</span></a>
+                        <a href="#" class="nav-subitem" data-target="agregar-equipo"><i class="fas fa-plus-circle"></i>
+                            <span>Agregar Equipo</span></a>
+                    </div>
+                </div>
+
+                <div class="nav-label">Administración</div>
+                <a href="#" class="nav-item" data-target="usuarios"><i class="fas fa-users"></i>
+                    <span>Usuarios</span></a>
+                <a href="#" class="nav-item" data-target="reportes"><i class="fas fa-chart-pie"></i>
+                    <span>Reportes</span></a>
+            </nav>
+            <div class="sidebar-bottom">
+                <a href="#" class="nav-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Cerrar
+                        Sesión</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-wrapper">
+            <header class="top-header">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="global-search" placeholder="Buscar operaciones, equipos o informes...">
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon theme-toggle" title="Cambiar tema"><i class="fas fa-moon"></i></button>
+                    <button class="btn-icon bell-btn" title="Notificaciones"><i class="fas fa-bell"></i><span
+                            class="badge" id="notif-badge">3</span></button>
+                    <div class="user-profile" id="user-profile-btn">
+                        <div class="avatar" id="user-avatar">AD<div class="status-dot"></div>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name" id="user-name-display">Administrador</span>
+                            <span class="user-role" id="user-role-display">admin@cbit.com</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="views-container">
+
+                <!-- 1. Dashboard -->
+                <section id="dashboard" class="view-section active">
+                    <div class="section-header">
+                        <h1 class="page-title">Dashboard General</h1>
+                        <p class="page-subtitle">Resumen de actividades y estado del CBIT</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel" style="cursor:pointer"
+                            onclick="switchViewPub('registro-ingreso')">
+                            <div class="stat-icon purple"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <h3>Ingresos Hoy</h3>
+                                <h2 id="stat-ingresos">0</h2>
+                                <span class="trend positive"><i class="fas fa-arrow-up"></i> Hoy</span>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel" style="cursor:pointer"
+                            onclick="switchViewPub('estado-equipos')">
+                            <div class="stat-icon blue"><i class="fas fa-laptop-medical"></i></div>
+                            <div class="stat-info">
+                                <h3>Equipos en Reparación</h3>
+                                <h2 id="stat-reparacion">0</h2>
+                                <span class="trend negative"><i class="fas fa-wrench"></i> Ver estado</span>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel" style="cursor:pointer"
+                            onclick="switchViewPub('reserva-equipos')">
+                            <div class="stat-icon orange"><i class="fas fa-calendar-check"></i></div>
+                            <div class="stat-info">
+                                <h3>Reservas Activas</h3>
+                                <h2 id="stat-reservas">0</h2>
+                                <span class="trend positive"><i class="fas fa-check"></i> Ver reservas</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-content-grid">
+                        <div class="glass-panel main-panel">
+                            <h3>Actividades Recientes</h3>
+                            <div id="recent-activity-list" class="activity-list"></div>
+                        </div>
+                        <div class="glass-panel side-panel">
+                            <h3>Accesos Rápidos</h3>
+                            <div class="quick-links">
+                                <button class="quick-btn" onclick="switchViewPub('registro-ingreso')"><i
+                                        class="fas fa-user-plus"></i> Nuevo Registro</button>
+                                <button class="quick-btn" onclick="switchViewPub('soporte-tecnico')"><i
+                                        class="fas fa-tools"></i> Ticket de Soporte</button>
+                                <button class="quick-btn" onclick="switchViewPub('reserva-equipos')"><i
+                                        class="fas fa-calendar-plus"></i> Nueva Reserva</button>
+                                <button class="quick-btn" onclick="switchViewPub('agregar-equipo')"><i
+                                        class="fas fa-laptop"></i> Agregar Equipo</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Registro de Ingreso -->
+                <section id="registro-ingreso" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Registro de Ingreso</h1>
+                        <p class="page-subtitle">Registra la entrada de docentes, estudiantes y personal del CBIT en el
+                            mismo día</p>
+                    </div>
+                    <div class="glass-panel content-panel">
+                        <h2>Nuevo Ingreso</h2>
+                        <form class="premium-form" id="form-ingreso" onsubmit="return false;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Tipo de Persona</label>
+                                    <select class="form-control" id="ing-tipo">
+                                        <option value="Estudiante">Estudiante</option>
+                                        <option value="Docente">Docente</option>
+                                        <option value="Personal CBIT">Personal CBIT</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Identificación / Cédula</label>
+                                    <input type="text" class="form-control" id="ing-cedula" placeholder="Ej: 12345678"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nombre y Apellido</label>
+                                    <input type="text" class="form-control" id="ing-nombre"
+                                        placeholder="Nombre completo" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Motivo de Visita</label>
+                                    <input type="text" class="form-control" id="ing-motivo"
+                                        placeholder="Clase, Práctica, Asesoría...">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-outline"
+                                    onclick="limpiarFormulario('form-ingreso')"><i class="fas fa-eraser"></i>
+                                    Limpiar</button>
+                                <button type="button" class="btn btn-primary" onclick="guardarIngreso()"><i
+                                        class="fas fa-save"></i> Registrar Ingreso</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Tabla de registros del día -->
+                    <div class="glass-panel content-panel" style="margin-top:1.5rem">
+                        <div class="panel-toolbar">
+                            <h3>Registros de Hoy — <span id="fecha-hoy"></span></h3>
+                            <button class="btn btn-outline" onclick="exportarTabla('tabla-ingresos', 'Ingresos')"><i
+                                    class="fas fa-file-export"></i> Exportar</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tipo</th>
+                                        <th>Cédula</th>
+                                        <th>Nombre</th>
+                                        <th>Motivo</th>
+                                        <th>Hora</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-ingresos"></tbody>
+                            </table>
+                            <div id="ing-empty" class="empty-state"><i class="fas fa-clipboard-list"></i>
+                                <p>No hay ingresos registrados hoy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3.1 Agregar Equipo (Formulario) -->
+                <section id="agregar-equipo" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Agregar Nuevo Equipo</h1>
+                        <p class="page-subtitle">Registra un nuevo equipo tecnológico en el inventario del CBIT</p>
+                    </div>
+
+                    <div class="glass-panel content-panel">
+                        <form class="premium-form" id="form-equipo" onsubmit="return false;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Código del Equipo</label>
+                                    <input type="text" class="form-control" id="eq-codigo" placeholder="Ej: CBIT-LAP-05"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre / Modelo</label>
+                                    <input type="text" class="form-control" id="eq-modelo"
+                                        placeholder="Ej: HP ProBook G8" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Marca</label>
+                                    <input type="text" class="form-control" id="eq-marca"
+                                        placeholder="Ej: HP, Dell, Lenovo...">
+                                </div>
+                                <div class="form-group">
+                                    <label>Estado Inicial</label>
+                                    <select class="form-control" id="eq-estado">
+                                        <option value="Operativo" selected>Operativo</option>
+                                        <option value="En Reparación">En Reparación</option>
+                                        <option value="Dañado">Dañado</option>
+                                        <option value="Baja">Dado de Baja</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions" style="justify-content: flex-start; margin-top: 1rem;">
+                                <button type="button" class="btn btn-primary" onclick="guardarEquipo()"><i
+                                        class="fas fa-save"></i> Registrar Equipo</button>
+                                <button type="button" class="btn btn-outline"
+                                    onclick="limpiarFormulario('form-equipo')">Limpiar Formulario</button>
+                                <button type="button" class="btn btn-outline" style="margin-left:auto"
+                                    onclick="switchViewPub('estado-equipos')"><i class="fas fa-arrow-left"></i> Volver a
+                                    Equipos</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- 3. Estado de Equipos (Tabla) -->
+                <section id="estado-equipos" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Gestión de Equipos</h1>
+                        <p class="page-subtitle">Control, registro e historial del inventario de equipos</p>
+                    </div>
+
+                    <div class="glass-panel content-panel">
+                        <div class="panel-toolbar">
+                            <h3 style="margin: 0;">Equipos Registrados</h3>
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="buscar-equipo" placeholder="Buscar por código o modelo..."
+                                    oninput="filtrarEquipos()">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Equipo</th>
+                                        <th>Marca</th>
+                                        <th>Estado</th>
+                                        <th>Última Rev.</th>
+                                        <th>Historial</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-equipos"></tbody>
+                            </table>
+                            <div id="eq-empty" class="empty-state"><i class="fas fa-laptop"></i>
+                                <p>No hay equipos registrados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Reservaciones -->
+                <section id="reserva-equipos" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Gestión de Reservaciones</h1>
+                        <p class="page-subtitle">Asignación temporal de espacios y recursos técnicos a usuarios</p>
+                    </div>
+
+                    <div class="glass-panel content-panel" style="margin-bottom: 1.5rem;">
+                        <h3><i class="fas fa-calendar-plus"></i> Nueva Reservación</h3>
+                        <form class="premium-form" id="form-reserva" onsubmit="return false;" style="margin-top: 1rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Espacio a Reservar <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="res-espacio"
+                                        placeholder="Ej: Laboratorio 1, Sala Principal" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Equipos a Utilizar (Opcional)</label>
+                                    <select class="form-control" id="res-equipos" multiple size="3"
+                                        style="height: auto;"></select>
+                                    <small style="color:var(--text-light)">Mantén presionada la tecla Ctrl (o Cmd) para
+                                        seleccionar múltiples equipos.</small>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Usuario / Responsable <span class="required">*</span></label>
+                                    <input type="text" class="form-control" id="res-usuario"
+                                        placeholder="Nombre de quien recibe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Propósito de la Reserva</label>
+                                    <input type="text" class="form-control" id="res-proposito"
+                                        placeholder="Ej: Taller de programación, Práctica de redes...">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Fecha y Hora Inicio <span class="required">*</span></label>
+                                    <input type="datetime-local" class="form-control" id="res-inicio" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fecha y Hora Fin (Aprox.) <span class="required">*</span></label>
+                                    <input type="datetime-local" class="form-control" id="res-fin" required>
+                                </div>
+                            </div>
+                            <div class="form-actions" style="justify-content: flex-start; margin-top: 1rem;">
+                                <button type="button" class="btn btn-primary" onclick="guardarReserva()"><i
+                                        class="fas fa-save"></i> Guardar Reservación</button>
+                                <button type="button" class="btn btn-outline"
+                                    onclick="limpiarFormulario('form-reserva')"><i class="fas fa-eraser"></i>
+                                    Limpiar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel content-panel">
+                        <div class="panel-toolbar">
+                            <h3 style="margin: 0;">Historial de Reservas</h3>
+                            <button class="btn btn-outline" onclick="exportarTabla('tabla-reservas','Reservas')"><i
+                                    class="fas fa-file-export"></i> Exportar</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Espacio</th>
+                                        <th>Equipos</th>
+                                        <th>Usuario</th>
+                                        <th>Inicio</th>
+                                        <th>Fin</th>
+                                        <th>Propósito</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-reservas"></tbody>
+                            </table>
+                            <div id="res-empty" class="empty-state"><i class="fas fa-calendar"></i>
+                                <p>No hay reservaciones registradas.</p>
+                            </div>
+                        </div>
+                </section>
+
+                <!-- 4.1 Calendario de Reservaciones -->
+                <section id="calendario-reservas" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Calendario de Reservaciones</h1>
+                        <p class="page-subtitle">Vista semanal de espacios y equipos ocupados</p>
+                    </div>
+
+                    <div class="glass-panel content-panel">
+                        <div class="panel-toolbar" style="margin-bottom: 1rem;">
+                            <h3>Semana Actual</h3>
+                            <button class="btn btn-outline" onclick="renderCalendario()"><i class="fas fa-sync-alt"></i>
+                                Actualizar</button>
+                        </div>
+                        <div class="calendar-wrapper">
+                            <div class="calendar-grid" id="calendar-grid">
+                                <!-- Generado por JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Soporte Técnico -->
+                <section id="soporte-tecnico" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Soporte y Registro Técnico</h1>
+                        <p class="page-subtitle">Registro de intervenciones técnicas y mantenimientos</p>
+                    </div>
+                    <div class="glass-panel content-panel">
+                        <h2>Registrar Intervención Técnica</h2>
+                        <form class="premium-form" id="form-soporte" onsubmit="return false;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Identificación del Técnico</label>
+                                    <input type="text" class="form-control" id="sop-cedula" placeholder="Cédula / ID"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre del Técnico</label>
+                                    <input type="text" class="form-control" id="sop-nombre"
+                                        placeholder="Nombre y Apellido" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Empresa / Para quién trabaja</label>
+                                    <input type="text" class="form-control" id="sop-empresa"
+                                        placeholder="Institución o Independiente">
+                                </div>
+                                <div class="form-group">
+                                    <label>Fecha de Intervención</label>
+                                    <input type="date" class="form-control" id="today-date-soporte">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Equipo(s) Intervenido(s)</label>
+                                    <select class="form-control" id="sop-equipos" multiple
+                                        style="min-height:100px"></select>
+                                    <small>Ctrl+Click para selección múltiple</small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo de Reparación / Mantenimiento</label>
+                                    <select class="form-control" id="sop-tipo">
+                                        <option>Preventivo (Software)</option>
+                                        <option>Preventivo (Hardware / Limpieza)</option>
+                                        <option>Correctivo (Sustitución de piezas)</option>
+                                        <option>Correctivo (Formateo / Reinstalación)</option>
+                                        <option>Evaluación / Diagnóstico</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Descripción Detallada del Trabajo</label>
+                                <textarea class="form-control" id="sop-descripcion" rows="3"
+                                    placeholder="Detalles específicos de la reparación..."></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-outline"
+                                    onclick="limpiarFormulario('form-soporte')"><i class="fas fa-eraser"></i>
+                                    Limpiar</button>
+                                <button type="button" class="btn btn-primary" onclick="guardarSoporte()"><i
+                                        class="fas fa-file-signature"></i> Guardar Registro</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="glass-panel content-panel" style="margin-top:1.5rem">
+                        <div class="panel-toolbar">
+                            <h3>Intervenciones Registradas</h3>
+                            <button class="btn btn-outline" onclick="exportarTabla('tabla-soporte','Soporte')"><i
+                                    class="fas fa-file-export"></i> Exportar</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Técnico</th>
+                                        <th>Empresa</th>
+                                        <th>Equipos</th>
+                                        <th>Tipo</th>
+                                        <th>Fecha</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-soporte"></tbody>
+                            </table>
+                            <div id="sop-empty" class="empty-state"><i class="fas fa-tools"></i>
+                                <p>No hay intervenciones registradas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Usuarios -->
+                <section id="usuarios" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Gestión de Usuarios</h1>
+                        <p class="page-subtitle">Administra los accesos al sistema CBIT</p>
+                    </div>
+                    <div class="glass-panel content-panel">
+                        <div class="panel-toolbar">
+                            <h3>Usuarios del Sistema</h3>
+                            <button class="btn btn-primary" onclick="openModal('modal-nuevo-usuario')"><i
+                                    class="fas fa-user-plus"></i> Nuevo Usuario</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cédula</th>
+                                        <th>Nombre</th>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th>Rol</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-usuarios"></tbody>
+                            </table>
+                            <div id="usr-empty" class="empty-state"><i class="fas fa-users-cog"></i>
+                                <p>No hay usuarios registrados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. Reportes -->
+                <section id="reportes" class="view-section">
+                    <div class="section-header">
+                        <h1 class="page-title">Reportes</h1>
+                        <p class="page-subtitle">Exporta y resume los datos del sistema</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon purple"><i class="fas fa-clipboard-list"></i></div>
+                            <div class="stat-info">
+                                <h3>Ingresos Totales</h3>
+                                <h2 id="rep-ingresos">0</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon blue"><i class="fas fa-laptop"></i></div>
+                            <div class="stat-info">
+                                <h3>Equipos Registrados</h3>
+                                <h2 id="rep-equipos">0</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon orange"><i class="fas fa-wrench"></i></div>
+                            <div class="stat-info">
+                                <h3>Intervenciones Técnicas</h3>
+                                <h2 id="rep-soporte">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-panel content-panel" style="margin-top:1.5rem">
+                        <h3 style="margin-bottom:1.5rem">Exportar por Módulo</h3>
+                        <div class="quick-links">
+                            <button class="quick-btn" onclick="exportarTabla('tabla-ingresos','Ingresos')"><i
+                                    class="fas fa-file-csv"></i> Exportar Ingresos (CSV)</button>
+                            <button class="quick-btn" onclick="exportarTabla('tabla-equipos','Equipos')"><i
+                                    class="fas fa-file-csv"></i> Exportar Equipos (CSV)</button>
+                            <button class="quick-btn" onclick="exportarTabla('tabla-reservas','Reservas')"><i
+                                    class="fas fa-file-csv"></i> Exportar Reservas (CSV)</button>
+                            <button class="quick-btn" onclick="exportarTabla('tabla-soporte','Soporte')"><i
+                                    class="fas fa-file-csv"></i> Exportar Soporte (CSV)</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ======================== MODALES ======================== -->
+
+    <!-- Modal: Historial Equipo -->
+    <div id="modal-historial" class="modal-overlay">
+        <div class="modal-card modal-wide">
+            <div class="modal-header">
+                <h3><i class="fas fa-history"></i> Historial de Reparaciones — <span id="hist-equipo-nombre"></span>
+                </h3>
+                <button class="modal-close" onclick="closeModal('modal-historial')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Técnico</th>
+                                <th>Empresa</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-historial-modal"></tbody>
+                    </table>
+                    <div id="hist-empty" class="empty-state"><i class="fas fa-tools"></i>
+                        <p>Sin intervenciones registradas para este equipo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Editar Equipo -->
+    <div id="modal-editar-equipo" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar Equipo</h3>
+                <button class="modal-close" onclick="closeModal('modal-editar-equipo')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form class="premium-form" onsubmit="return false;">
+                    <input type="hidden" id="edit-eq-idx">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Código</label>
+                            <input type="text" class="form-control" id="edit-eq-codigo" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Modelo</label>
+                            <input type="text" class="form-control" id="edit-eq-modelo" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <input type="text" class="form-control" id="edit-eq-marca">
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select class="form-control" id="edit-eq-estado">
+                                <option value="Operativo">Operativo</option>
+                                <option value="En Reparación">En Reparación</option>
+                                <option value="Dañado">Dañado</option>
+                                <option value="Baja">Dado de Baja</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline"
+                            onclick="closeModal('modal-editar-equipo')">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="actualizarEquipo()"><i
+                                class="fas fa-save"></i> Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Nuevo Usuario -->
+    <div id="modal-nuevo-usuario" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Nuevo Usuario</h3>
+                <button class="modal-close" onclick="closeModal('modal-nuevo-usuario')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form class="premium-form" id="form-usuario" onsubmit="return false;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Cédula de Identidad</label>
+                            <input type="text" class="form-control" id="usr-cedula" placeholder="12345678" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" class="form-control" id="usr-nombre" placeholder="Nombre y Apellido"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre de Usuario</label>
+                            <input type="text" class="form-control" id="usr-username" placeholder="usuario_cbit"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="usr-email" placeholder="correo@cbit.com"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Rol</label>
+                            <select class="form-control" id="usr-rol-id">
+                                <option disabled selected>Cargando roles...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select class="form-control" id="usr-estado">
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline"
+                            onclick="closeModal('modal-nuevo-usuario')">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick="guardarUsuario()"><i
+                                class="fas fa-save"></i> Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de notificación -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
